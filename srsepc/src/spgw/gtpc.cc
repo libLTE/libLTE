@@ -567,11 +567,12 @@ int spgw::gtpc::init_ue_ip(spgw_args_t* args, const std::map<std::string, uint64
     }
   }
 
-  // XXX TODO add an upper bound to ip addr range via config, use 254 for now
+  uint32_t hosts_bound = (~ntohl(inet_addr(args->sgi_if_netmask.c_str()))) - 1;
+
   // first address is allocated to the epc tun interface, start w/next addr
-  for (uint32_t n = 1; n < 254; ++n) {
+  for (uint32_t n = 1; n < hosts_bound; ++n) {
     struct in_addr ue_addr;
-    ue_addr.s_addr = inet_addr(args->sgi_if_addr.c_str()) + htonl(n);
+    ue_addr.s_addr = htonl(ntohl(inet_addr(args->sgi_if_addr.c_str())) + n);
 
     std::map<std::string, uint64_t>::const_iterator iter = ip_to_imsi.find(inet_ntoa(ue_addr));
     if (iter != ip_to_imsi.end()) {
