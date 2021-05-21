@@ -216,6 +216,11 @@ void enb::cmd_cell_gain(uint32_t cell_id, float gain)
   phy->cmd_cell_gain(cell_id, gain);
 }
 
+void enb::cmd_cell_measure()
+{
+  phy->cmd_cell_measure();
+}
+
 std::string enb::get_build_mode()
 {
   return std::string(srsran_get_build_mode());

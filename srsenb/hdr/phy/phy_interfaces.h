@@ -40,6 +40,7 @@ struct phy_cell_cfg_t {
   uint32_t      root_seq_idx;
   uint32_t      num_ra_preambles;
   float         gain_db;
+  bool          dl_measure;
 };
 
 struct phy_cell_cfg_nr_t {
@@ -51,6 +52,7 @@ struct phy_cell_cfg_nr_t {
   uint32_t            root_seq_idx;
   uint32_t            num_ra_preambles;
   float               gain_db;
+  bool                dl_measure;
 };
 
 typedef std::vector<phy_cell_cfg_t>    phy_cell_cfg_list_t;

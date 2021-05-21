@@ -54,6 +54,11 @@ public:
   int dl_config_request(const dl_config_request_t& request) override;
   int tx_request(const tx_request_t& request) override;
 
+  void cmd_cell_measure() override
+  {
+    // Do nothing
+  }
+
   void cmd_cell_gain(uint32_t cell_idx, float gain_db) override
   {
     // Do nothing

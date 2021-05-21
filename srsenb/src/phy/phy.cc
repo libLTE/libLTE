@@ -243,6 +243,11 @@ void phy::cmd_cell_gain(uint32_t cell_id, float gain_db)
   workers_common.set_cell_gain(cell_id, gain_db);
 }
 
+void phy::cmd_cell_measure()
+{
+  workers_common.set_cell_measure_trigger();
+}
+
 /***** RRC->PHY interface **********/
 
 void phy::set_config(uint16_t rnti, const phy_rrc_cfg_list_t& phy_cfg_list)

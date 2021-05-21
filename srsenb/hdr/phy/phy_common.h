@@ -170,6 +170,19 @@ public:
     return c;
   };
 
+  void set_cell_measure_trigger()
+  {
+    // Trigger on LTE cell
+    for (auto it_lte = cell_list_lte.begin(); it_lte != cell_list_lte.end(); ++it_lte) {
+      it_lte->dl_measure = true;
+    }
+
+    // Trigger on NR cell
+    for (auto it_nr = cell_list_nr.begin(); it_nr != cell_list_nr.end(); ++it_nr) {
+      it_nr->dl_measure = true;
+    }
+  }
+
   void set_cell_gain(uint32_t cell_id, float gain_db)
   {
     // Find LTE cell
@@ -195,6 +208,20 @@ public:
     srsran::console("cell ID %d not found\n", cell_id);
   }
 
+  bool get_cell_measure_trigger(uint32_t cc_idx)
+  {
+    if (cc_idx < cell_list_lte.size()) {
+      return cell_list_lte.at(cc_idx).dl_measure;
+    }
+
+    cc_idx -= cell_list_lte.size();
+    if (cc_idx < cell_list_nr.size()) {
+      return cell_list_nr.at(cc_idx).dl_measure;
+    }
+
+    return false;
+  }
+
   float get_cell_gain(uint32_t cc_idx)
   {
     if (cc_idx < cell_list_lte.size()) {
@@ -207,6 +234,20 @@ public:
     }
 
     return 0.0f;
+  }
+
+  void clear_cell_measure_trigger(uint32_t cc_idx)
+  {
+    if (cc_idx < cell_list_lte.size()) {
+      cell_list_lte.at(cc_idx).dl_measure = false;
+    }
+
+    cc_idx -= cell_list_lte.size();
+    if (cc_idx < cell_list_nr.size()) {
+      cell_list_nr.at(cc_idx).dl_measure = false;
+    }
+
+    return;
   }
 
   // Common Physical Uplink DMRS configuration

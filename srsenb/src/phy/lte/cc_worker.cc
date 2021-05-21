@@ -18,6 +18,7 @@
  * and at http://www.gnu.org/licenses/.
  *
  */
+#include <iomanip>
 
 #include "srsran/common/threads.h"
 #include "srsran/srsran.h"
@@ -261,6 +262,24 @@ void cc_worker::work_dl(const srsran_dl_sf_cfg_t&            dl_sf_cfg,
     for (uint32_t i = 0; i < enb_dl.cell.nof_ports; i++) {
       srsran_vec_sc_prod_cfc(signal_buffer_tx[i], scale, signal_buffer_tx[i], sf_len);
     }
+  }
+
+  // Measure if flag was triggered
+  bool cell_meas_flag = phy->get_cell_measure_trigger(cc_idx);
+  if (cell_meas_flag == true) {
+    uint32_t sf_len = SRSRAN_SF_LEN_PRB(enb_dl.cell.nof_prb);
+    for (uint32_t i = 0; i < enb_dl.cell.nof_ports; i++) {
+      // PAPR measure
+      std::vector<float> sigSq(sf_len);
+      srsran_vec_abs_square_cf(signal_buffer_tx[i], sigSq.data(), sf_len);
+      float sigPMax  = sigSq[srsran_vec_max_abs_fi(sigSq.data(), sf_len)];
+      float sigPMean = srsran_vec_acc_ff(sigSq.data(), sf_len) / float(sf_len);
+      float PAPRdB   = 10.0f * log10(sigPMax / sigPMean);
+      std::cout << "Cell #" << cc_idx << " port #" << i << " PAPR = " << std::setprecision(4) << PAPRdB << " dB "
+                << std::endl;
+    }
+    // clear measurement flag on cell
+    phy->clear_cell_measure_trigger(cc_idx);
   }
 }
 

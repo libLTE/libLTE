@@ -29,6 +29,10 @@ class enb_command_interface
 {
 public:
   /**
+   * Trigger downlink singnal measurements.
+   */
+  virtual void cmd_cell_measure() = 0;
+  /**
    * Sets the relative gain of a cell from it's index (following rr.conf) order.
    * @param cell_id Provides a cell identifier
    * @param gain Relative gain

@@ -439,6 +439,7 @@ static void* input_loop(metrics_stdout* metrics, srsenb::enb_command_interface* 
 {
   struct pollfd pfd = {STDIN_FILENO, POLLIN, 0};
   string        input_line;
+
   while (running) {
     int ret = poll(&pfd, 1, 1000); // query stdin with a timeout of 1000ms
     if (ret == 1) {
@@ -458,6 +459,9 @@ static void* input_loop(metrics_stdout* metrics, srsenb::enb_command_interface* 
             cout << "Enter t to restart trace." << endl;
           }
           metrics->toggle_print(do_metrics);
+        } else if (cmd[0] == "m") {
+          // Trigger cell measurements
+          control->cmd_cell_measure();
         } else if (cmd[0] == "q") {
           raise(SIGTERM);
         } else if (cmd[0] == "cell_gain") {
@@ -475,6 +479,7 @@ static void* input_loop(metrics_stdout* metrics, srsenb::enb_command_interface* 
         } else {
           cout << "Available commands: " << endl;
           cout << "          t: starts console trace" << endl;
+          cout << "          m: downlink signal measurements" << endl;
           cout << "          q: quit srsenb" << endl;
           cout << "  cell_gain: set relative cell gain" << endl;
           cout << endl;
