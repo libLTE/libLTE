@@ -45,6 +45,7 @@ typedef struct {
   std::string gtpu_bind_addr;
   std::string sgi_if_addr;
   std::string sgi_if_name;
+  std::string sgi_if_netmask;
   uint32_t    max_paging_queue;
 } spgw_args_t;
 
